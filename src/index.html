@@ -1,0 +1,138 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>NightUp</title>
+
+	<!-- Mobile viewport optimization h5bp.com/ad -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+
+	<!-- The script prevents links from opening in mobile safari. https://gist.github.com/1042026 -->
+	<!-- <script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")</script> -->
+
+	<!-- Mobile IE allows us to activate ClearType technology for smoothing fonts for easy reading -->
+	<meta http-equiv="cleartype" content="on">
+  <script src="http://maps.googleapis.com/maps/api/js?sensor=false&language=en"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
+  <script type="text/javascript" src="assets/js/angular.min.js"></script>
+  <script type="text/javascript" src="assets/js/angular-resource.min.js"></script>
+  <script type="text/javascript" src="assets/js/angular-sanitize.min.js"></script>
+  <script type="text/javascript" src="assets/js/angular-notification.js"></script>
+  <script type="text/javascript" src="assets/js/angular-cookies.min.js"></script>
+  <script type="text/javascript" src="assets/js/angular-loader.min.js"></script>
+  <script type="text/javascript" src="assets/js/angular-google-maps.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.timeago.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.timeago.es.js"></script>
+
+	<link href="assets/css/reset.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/main.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript">
+    var Environment = '<%= @environment %>';
+    var ClientType = '<%= @client_type %>';
+    var Emulator = '<%= @emulator %>';
+    var FBAppId = '<%= @fb_key %>';
+  </script>
+
+<% if @client_type == 'mobile' %>
+  <script type="text/javascript" charset="utf-8" src="cordova-2.2.0.js"></script>
+  <script type="text/javascript" charset="utf-8" src="ChildBrowser.js"></script>
+<% end %>
+
+
+</head>
+<body ng-app="NightUp">
+    <div class="menu" ng-controller="MenuCtrl">
+      <nav id="nav_menu" class="menus no-move">
+        <div class="shadow-menu"></div>
+        <h1><img height="100%" src="images/logo-menu.png"></h1>
+        <span class="line"></span>
+        <ul>
+          <li><a ng-click="hide('Muro')" href="#/wall"><span>Muro</span></a></li>
+          <li><a ng-click="hide('Mi Perfil')" href="#/profile"><span>Mi Perfil</span></a></li>
+          <li><a ng-click="hide('Amigos')" href="#/friends"><span>Amigos</span></a></li>
+          <li><a ng-click="hide('Previas')" href="#/previouses"><span>Previas</span></a></li>
+          <li><a ng-click="hide('Lugares')" href="#/places"><span>Lugares</span></a></li>
+          <li><a ng-click="hide('Mensajes')" href="#/messages"><span>Mensajes</span></a></li>
+        </ul>
+      </nav>
+      <header id="header_menu" class="menu-bar left">
+          <div class="bar-main left">
+              <a class="boton-volver left" ng-click="back()">◄</a>
+              <img width="48px" src="images/logoSmall.png">
+          <span>
+            <span></span>
+          </span>
+          </div>
+          <div class="hilo left">
+              <a class="view-menu left" ng-click="toggle()"></a>
+              <h2 id="menu_path" class="right">Muro</h2>
+          </div>
+      </header>
+    </div>
+    <div ng-view="" id="ng-view">
+    </div>
+    <div id="main_spinner">
+       !!!!!!!!Main Spinner!!!!!!!!!!!!
+    </div>
+    <div id="background_spinner">
+      bg spinner
+    </div>
+    <script>
+      window.fbAsyncInit = function() {
+        // init the FB JS SDK
+        FB.init({
+          appId      : <%= @fb_key %>, // App ID from the App Dashboard
+          cookie     : true, // set sessions cookies to allow your server to access the session?
+          xfbml      : false,  // parse XFBML tags on this page?
+          frictionlessRequests : true
+        });
+
+        // Additional initialization code such as adding Event Listeners goes here
+
+      };
+
+      // Load the SDK's source Asynchronously
+      (function(d, debug){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document, /*debug*/ false));
+    </script>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="directives/header.js"></script>
+    <script type="text/javascript" src="controllers/menu.js"></script>
+    <script type="text/javascript" src="controllers/session.js"></script>
+    <script type="text/javascript" src="controllers/friendships.js"></script>
+    <script type="text/javascript" src="controllers/friendship_pendings.js"></script>
+    <script type="text/javascript" src="controllers/facebook_invite.js"></script>
+    <script type="text/javascript" src="controllers/messages.js"></script>
+    <script type="text/javascript" src="controllers/wall.js"></script>
+    <script type="text/javascript" src="controllers/user.js"></script>
+    <script type="text/javascript" src="controllers/previouses.js"></script>
+    <script type="text/javascript" src="controllers/previous.js"></script>
+    <script type="text/javascript" src="controllers/places.js"></script>
+    <script type="text/javascript" src="controllers/place.js"></script>
+    <script type="text/javascript" src="services/session.js"></script>
+    <script type="text/javascript" src="services/friends.js"></script>
+    <script type="text/javascript" src="services/user.js"></script>
+    <script type="text/javascript" src="services/message.js"></script>
+    <script type="text/javascript" src="services/previous.js"></script>
+    <script type="text/javascript" src="services/checkin.js"></script>
+    <script type="text/javascript" src="services/status.js"></script>
+    <script type="text/javascript" src="services/place.js"></script>
+    <script type="text/javascript" src="services/comment.js"></script>
+    <script type="text/javascript" src="services/gps.js"></script>
+    <script type="text/javascript" src="services/access_token.js"></script>
+    <div id="fb-root"></div>
+</body>
+</html>
