@@ -1,0 +1,7 @@
+*.swp
+*~.nib
+*.dep
+*.log
+*.nib
+.DS_Store
+.rvmrc
